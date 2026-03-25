@@ -1,0 +1,38 @@
+aid: tempo
+name: Tempo
+description: >-
+  Tempo is an open source distributed tracing backend from Grafana Labs that scales to ingest massive trace volumes with minimal dependencies.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Observability
+  - Distributed Tracing
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/tempo/refs/heads/main/apis.yml
+created: '2026-03-25'
+modified: '2026-03-25'
+specificationVersion: '0.19'
+apis:
+  - aid: tempo:tempo
+    name: Tempo
+    description: >-
+      Tempo is an open source distributed tracing backend from Grafana Labs that scales to ingest massive trace volumes with minimal dependencies.
+    humanURL: https://grafana.com/oss/tempo/
+    tags:
+      - Observability
+      - Distributed Tracing
+    properties:
+      - type: Documentation
+        url: https://grafana.com/docs/tempo/latest/
+      - type: GitHub Repository
+        url: https://github.com/grafana/tempo
+common:
+  - type: Website
+    url: https://grafana.com/oss/tempo/
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/
+  - type: GitHub Organization
+    url: https://github.com/grafana/tempo
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
