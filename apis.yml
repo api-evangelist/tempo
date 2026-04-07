@@ -5,8 +5,8 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Observability
   - Distributed Tracing
+  - Observability
 url: >-
   https://raw.githubusercontent.com/api-evangelist/tempo/refs/heads/main/apis.yml
 created: '2026-03-25'
@@ -19,8 +19,8 @@ apis:
       Tempo is an open source distributed tracing backend from Grafana Labs that scales to ingest massive trace volumes with minimal dependencies.
     humanURL: https://grafana.com/oss/tempo/
     tags:
-      - Observability
       - Distributed Tracing
+      - Observability
     properties:
       - type: Documentation
         url: https://grafana.com/docs/tempo/latest/
