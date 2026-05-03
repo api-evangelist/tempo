@@ -1,0 +1,212 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Grafana Tempo HTTP API"
+  description: "Grafana Tempo distributed tracing API for querying traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data."
+  tags:
+    - Distributed Tracing
+    - Observability
+    - OpenTelemetry
+    - Grafana
+    - Monitoring
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      TEMPO_BASE_URL: TEMPO_BASE_URL
+
+capability:
+  consumes:
+    - type: http
+      namespace: tempo
+      baseUri: "{{TEMPO_BASE_URL}}"
+      description: "Grafana Tempo HTTP API"
+      resources:
+        - name: traces
+          path: /api/traces/{traceID}
+          description: "Retrieve traces by ID"
+          operations:
+            - name: get-trace
+              method: GET
+              description: "Get a complete trace by its trace ID"
+              inputParameters:
+                - name: traceID
+                  in: path
+                  type: string
+                  required: true
+                  description: "Hexadecimal trace identifier"
+                - name: start
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Unix epoch start time (seconds)"
+                - name: end
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Unix epoch end time (seconds)"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: search
+          path: /api/search
+          description: "Search traces using TraceQL"
+          operations:
+            - name: search-traces
+              method: GET
+              description: "Search traces with TraceQL query"
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: false
+                  description: "TraceQL query string"
+                - name: minDuration
+                  in: query
+                  type: string
+                  required: false
+                  description: "Minimum duration filter"
+                - name: limit
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Maximum results"
+                - name: start
+                  in: query
+                  type: integer
+                  required: false
+                  description: "Start time (Unix epoch)"
+                - name: end
+                  in: query
+                  type: integer
+                  required: false
+                  description: "End time (Unix epoch)"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: tag-keys
+          path: /api/search/tags
+          description: "List tag keys in trace data"
+          operations:
+            - name: list-tag-keys
+              method: GET
+              description: "List all tag keys present in trace data"
+              inputParameters:
+                - name: scope
+                  in: query
+                  type: string
+                  required: false
+                  description: "Attribute scope (span, resource, intrinsic)"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: tag-values
+          path: /api/search/tag/{tagName}/values
+          description: "List values for a tag key"
+          operations:
+            - name: list-tag-values
+              method: GET
+              description: "List distinct values for a tag key"
+              inputParameters:
+                - name: tagName
+                  in: path
+                  type: string
+                  required: true
+                  description: "Tag key name"
+                - name: q
+                  in: query
+                  type: string
+                  required: false
+                  description: "TraceQL context query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: metrics
+          path: /api/metrics/query_range
+          description: "Generate time-series metrics from trace data"
+          operations:
+            - name: query-metrics-range
+              method: GET
+              description: "Generate metrics from traces using TraceQL metrics"
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "TraceQL metrics expression"
+                - name: start
+                  in: query
+                  type: integer
+                  required: true
+                  description: "Start time (Unix epoch)"
+                - name: end
+                  in: query
+                  type: integer
+                  required: true
+                  description: "End time (Unix epoch)"
+                - name: step
+                  in: query
+                  type: string
+                  required: false
+                  description: "Query step interval"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: tempo-api
+      resources:
+        - path: /v1/traces/{traceID}
+          name: traces
+          operations:
+            - method: GET
+              name: get-trace
+              description: "Get trace by ID"
+              call: "tempo.get-trace"
+              with:
+                traceID: "rest.traceID"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: tempo-mcp
+      transport: http
+      tools:
+        - name: get-trace
+          description: "Get a complete distributed trace by trace ID"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.get-trace"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: search-traces
+          description: "Search traces using TraceQL query language"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.search-traces"
+          outputParameters:
+            - type: object
+              mapping: "$."

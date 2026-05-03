@@ -1,0 +1,119 @@
+{
+  "name": "Grafana Tempo Trace",
+  "description": "Structure documentation for a Grafana Tempo distributed trace in OTLP format",
+  "fields": [
+    {
+      "name": "batches",
+      "type": "array",
+      "required": true,
+      "description": "OTLP resource span batches",
+      "items": {
+        "name": "ResourceSpans",
+        "fields": [
+          {
+            "name": "resource",
+            "type": "object",
+            "required": false,
+            "description": "Service resource attributes",
+            "fields": [
+              {
+                "name": "attributes",
+                "type": "array",
+                "required": false,
+                "description": "Resource key-value attributes (service.name, deployment.environment, etc.)"
+              }
+            ]
+          },
+          {
+            "name": "scopeSpans",
+            "type": "array",
+            "required": true,
+            "description": "Spans grouped by instrumentation scope",
+            "items": {
+              "name": "ScopeSpans",
+              "fields": [
+                {
+                  "name": "scope",
+                  "type": "object",
+                  "required": false,
+                  "description": "Instrumentation library name and version"
+                },
+                {
+                  "name": "spans",
+                  "type": "array",
+                  "required": true,
+                  "description": "Individual span records",
+                  "items": {
+                    "name": "Span",
+                    "fields": [
+                      {
+                        "name": "traceId",
+                        "type": "string",
+                        "required": true,
+                        "description": "128-bit trace identifier in uppercase hex",
+                        "example": "5B8EFFF798038103D269B633813FC60C"
+                      },
+                      {
+                        "name": "spanId",
+                        "type": "string",
+                        "required": true,
+                        "description": "64-bit span identifier in uppercase hex",
+                        "example": "EEE19B7EC3C1B173"
+                      },
+                      {
+                        "name": "parentSpanId",
+                        "type": "string",
+                        "required": false,
+                        "description": "Parent span ID (empty for root spans)"
+                      },
+                      {
+                        "name": "name",
+                        "type": "string",
+                        "required": true,
+                        "description": "Operation name",
+                        "example": "POST /orders"
+                      },
+                      {
+                        "name": "kind",
+                        "type": "integer",
+                        "required": false,
+                        "description": "Span kind: 0=unspecified, 1=internal, 2=server, 3=client, 4=producer, 5=consumer",
+                        "example": 2
+                      },
+                      {
+                        "name": "startTimeUnixNano",
+                        "type": "string",
+                        "required": true,
+                        "description": "Start time in nanoseconds since Unix epoch",
+                        "example": "1746259200000000000"
+                      },
+                      {
+                        "name": "endTimeUnixNano",
+                        "type": "string",
+                        "required": false,
+                        "description": "End time in nanoseconds since Unix epoch",
+                        "example": "1746259200145000000"
+                      },
+                      {
+                        "name": "attributes",
+                        "type": "array",
+                        "required": false,
+                        "description": "Span attributes following OpenTelemetry semantic conventions"
+                      },
+                      {
+                        "name": "status",
+                        "type": "object",
+                        "required": false,
+                        "description": "Span status with code (0=unset, 1=ok, 2=error) and optional message"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

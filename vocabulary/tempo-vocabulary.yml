@@ -1,0 +1,140 @@
+name: Tempo Vocabulary
+description: Domain vocabulary and taxonomy for Grafana Tempo distributed tracing, covering OpenTelemetry concepts, TraceQL query language, and observability terminology.
+version: "1.0.0"
+created: "2026-05-03"
+modified: "2026-05-03"
+
+domains:
+  - name: Distributed Tracing
+    description: Core distributed tracing concepts from the OpenTelemetry data model
+    terms:
+      - term: Trace
+        definition: A complete end-to-end record of a single request or transaction as it flows through a distributed system. Composed of a tree of spans sharing the same trace ID.
+        synonyms: [Request Trace, Distributed Trace]
+        tags: [Distributed Tracing, OpenTelemetry]
+
+      - term: Span
+        definition: The basic unit of work in distributed tracing, representing a single operation within a trace. Contains a name, start/end timestamps, attributes, events, and status.
+        synonyms: [Trace Span, Operation]
+        tags: [Distributed Tracing, OpenTelemetry]
+
+      - term: Trace ID
+        definition: A globally unique 128-bit identifier assigned to a trace. All spans in the same trace share the same trace ID. Represented as a 32-character hexadecimal string.
+        tags: [Distributed Tracing]
+
+      - term: Span ID
+        definition: A 64-bit identifier unique within a trace. Each span has a unique span ID. Represented as a 16-character hexadecimal string.
+        tags: [Distributed Tracing]
+
+      - term: Parent Span ID
+        definition: The span ID of the parent span, establishing the causal relationship between spans. Root spans have no parent span ID.
+        tags: [Distributed Tracing]
+
+      - term: Root Span
+        definition: The first span in a trace, representing the entry point of a request. Has no parent span ID. Usually represents the top-level service call.
+        synonyms: [Entry Span, Top-Level Span]
+        tags: [Distributed Tracing]
+
+      - term: Span Kind
+        definition: "Classification of a span's role in the request flow. Values: Internal (within a process), Server (handles incoming RPC), Client (outgoing RPC), Producer (async message send), Consumer (async message receive)."
+        tags: [Distributed Tracing, OpenTelemetry]
+
+      - term: Span Status
+        definition: The outcome of a span's operation. Values are Unset (default), Ok (success), or Error (failure with optional error message).
+        tags: [Distributed Tracing, OpenTelemetry]
+
+      - term: Span Attributes
+        definition: Key-value pairs attached to a span providing additional context. OpenTelemetry defines semantic conventions for common attributes (http.method, db.system, service.name, etc.).
+        synonyms: [Span Tags, Span Labels]
+        tags: [Distributed Tracing, OpenTelemetry]
+
+      - term: Span Events
+        definition: Time-stamped annotations within a span, similar to log messages but correlated to the trace. Useful for recording exceptions, cache hits, or significant moments within an operation.
+        synonyms: [Structured Log Events, Annotations]
+        tags: [Distributed Tracing, OpenTelemetry]
+
+  - name: OpenTelemetry
+    description: The OpenTelemetry observability standard and data model
+    terms:
+      - term: OpenTelemetry
+        definition: A CNCF observability framework providing vendor-neutral APIs, SDKs, and tooling for collecting, processing, and exporting traces, metrics, and logs.
+        abbreviation: OTel, OTEL
+        tags: [OpenTelemetry]
+
+      - term: OTLP
+        definition: OpenTelemetry Protocol — the wire format for transmitting traces, metrics, and logs between OpenTelemetry-instrumented services and observability backends. Supports gRPC and HTTP transports.
+        abbreviation: OTLP
+        tags: [OpenTelemetry]
+
+      - term: Resource
+        definition: A set of attributes describing the entity producing telemetry data (e.g., service.name, deployment.environment, host.name). Attached to all spans produced by a service instance.
+        tags: [OpenTelemetry]
+
+      - term: Instrumentation Scope
+        definition: Identifies the instrumentation library that produced spans. Contains the library name and version.
+        synonyms: [Instrumentation Library]
+        tags: [OpenTelemetry]
+
+      - term: Semantic Conventions
+        definition: OpenTelemetry-defined standard attribute names and values for common operations (HTTP, database, messaging, etc.). Ensures consistent attribute naming across services.
+        tags: [OpenTelemetry]
+
+      - term: W3C Trace Context
+        definition: W3C standard for propagating trace context across service boundaries via HTTP headers (traceparent, tracestate). Supported by OpenTelemetry and Tempo.
+        tags: [OpenTelemetry, Standards]
+
+  - name: TraceQL
+    description: Grafana Tempo's query language for filtering and selecting traces and spans
+    terms:
+      - term: TraceQL
+        definition: A query language developed for Grafana Tempo to filter spans within traces using a pipeline syntax. Supports attribute matchers, duration conditions, structural operators, and metrics generation.
+        tags: [TraceQL, Query Language]
+
+      - term: Span Selector
+        definition: The curly brace syntax in TraceQL for filtering spans based on attributes. Example: {.service.name="frontend" && .http.status_code=500}
+        tags: [TraceQL]
+
+      - term: Pipeline
+        definition: A TraceQL chain of operators connected with >> for progressive span filtering and transformation.
+        tags: [TraceQL]
+
+      - term: Structural Operator
+        definition: TraceQL operators that express relationships between spans in a trace: child (>>), descendant (>), siblings, and union operations.
+        tags: [TraceQL]
+
+      - term: Intrinsic Attribute
+        definition: Special built-in TraceQL attributes not prefixed with a scope dot: name, duration, status, statusMessage, kind, traceDuration, rootName, rootService.
+        tags: [TraceQL]
+
+  - name: Tempo Platform
+    description: Grafana Tempo-specific operational concepts
+    terms:
+      - term: Tempo
+        definition: Grafana Tempo — a high-scale, cost-efficient distributed tracing backend designed for object storage (GCS, S3, Azure Blob). Designed to require only object storage with no external dependencies like Elasticsearch or Cassandra.
+        tags: [Tempo, Grafana]
+
+      - term: Tempo Microservices Mode
+        definition: Deployment mode that splits Tempo into individual components (distributor, ingester, querier, compactor, etc.) for independent scaling.
+        synonyms: [Tempo Distributed Mode]
+        tags: [Tempo, Deployment]
+
+      - term: Tempo Monolithic Mode
+        definition: Simplified single-binary deployment mode where all Tempo components run in one process. Suitable for small deployments and development.
+        synonyms: [All-in-One Mode]
+        tags: [Tempo, Deployment]
+
+      - term: Ingester
+        definition: Tempo component responsible for receiving incoming trace data from distributors and writing it to temporary storage before flushing to the object store.
+        tags: [Tempo, Architecture]
+
+      - term: Querier
+        definition: Tempo component that handles trace query requests by searching both in-memory ingesters and the object store backend.
+        tags: [Tempo, Architecture]
+
+      - term: Compactor
+        definition: Tempo background component that compacts blocks in the object store to improve query performance and manage storage efficiently.
+        tags: [Tempo, Architecture]
+
+      - term: TraceQL Metrics
+        definition: Tempo feature enabling generation of Prometheus-compatible time-series metrics from trace data using TraceQL metric functions (rate, count_over_time, histogram_over_time).
+        tags: [Tempo, TraceQL, Metrics]

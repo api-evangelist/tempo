@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.com/schemas/tempo/trace.json",
+  "title": "Grafana Tempo Trace",
+  "description": "Schema for a Grafana Tempo distributed trace in OTLP JSON format containing resource spans and individual spans",
+  "type": "object",
+  "properties": {
+    "batches": {
+      "type": "array",
+      "description": "OTLP resource span batches grouped by service resource",
+      "items": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "type": "object",
+            "description": "Resource describing the source of the spans",
+            "properties": {
+              "attributes": {
+                "type": "array",
+                "description": "Resource attributes like service.name, service.version",
+                "items": {"$ref": "#/$defs/KeyValue"}
+              }
+            }
+          },
+          "scopeSpans": {
+            "type": "array",
+            "description": "Spans grouped by instrumentation scope",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "object",
+                  "description": "Instrumentation scope (library name and version)",
+                  "properties": {
+                    "name": {"type": "string"},
+                    "version": {"type": "string"}
+                  }
+                },
+                "spans": {
+                  "type": "array",
+                  "items": {"$ref": "#/$defs/Span"}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Span": {
+      "type": "object",
+      "description": "A single operation in a distributed trace",
+      "required": ["traceId", "spanId", "name", "startTimeUnixNano"],
+      "properties": {
+        "traceId": {
+          "type": "string",
+          "description": "16-byte trace identifier in hex",
+          "pattern": "^[0-9A-F]{32}$"
+        },
+        "spanId": {
+          "type": "string",
+          "description": "8-byte span identifier in hex",
+          "pattern": "^[0-9A-F]{16}$"
+        },
+        "parentSpanId": {
+          "type": "string",
+          "description": "Parent span identifier (empty string for root spans)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Operation name"
+        },
+        "kind": {
+          "type": "integer",
+          "description": "Span kind: 0=unspecified, 1=internal, 2=server, 3=client, 4=producer, 5=consumer",
+          "enum": [0, 1, 2, 3, 4, 5]
+        },
+        "startTimeUnixNano": {
+          "type": "string",
+          "description": "Start time in nanoseconds since Unix epoch"
+        },
+        "endTimeUnixNano": {
+          "type": "string",
+          "description": "End time in nanoseconds since Unix epoch"
+        },
+        "attributes": {
+          "type": "array",
+          "description": "Span attributes (OpenTelemetry semantic conventions)",
+          "items": {"$ref": "#/$defs/KeyValue"}
+        },
+        "events": {
+          "type": "array",
+          "description": "Span events (log-like annotations)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timeUnixNano": {"type": "string"},
+              "name": {"type": "string"},
+              "attributes": {
+                "type": "array",
+                "items": {"$ref": "#/$defs/KeyValue"}
+              }
+            }
+          }
+        },
+        "status": {
+          "type": "object",
+          "description": "Span status",
+          "properties": {
+            "code": {
+              "type": "integer",
+              "description": "0=unset, 1=ok, 2=error",
+              "enum": [0, 1, 2]
+            },
+            "message": {"type": "string"}
+          }
+        }
+      }
+    },
+    "KeyValue": {
+      "type": "object",
+      "description": "An attribute key-value pair",
+      "required": ["key", "value"],
+      "properties": {
+        "key": {"type": "string"},
+        "value": {
+          "type": "object",
+          "description": "AnyValue container",
+          "properties": {
+            "stringValue": {"type": "string"},
+            "intValue": {"type": "integer"},
+            "doubleValue": {"type": "number"},
+            "boolValue": {"type": "boolean"},
+            "arrayValue": {"type": "object"},
+            "kvlistValue": {"type": "object"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:3200/api/traces/5B8EFFF798038103D269B633813FC60C",
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "batches": [
+        {
+          "resource": {
+            "attributes": [
+              {"key": "service.name", "value": {"stringValue": "order-service"}},
+              {"key": "service.version", "value": {"stringValue": "1.4.2"}},
+              {"key": "deployment.environment", "value": {"stringValue": "production"}}
+            ]
+          },
+          "scopeSpans": [
+            {
+              "scope": {
+                "name": "go.opentelemetry.io/otel/sdk/trace",
+                "version": "v1.21.0"
+              },
+              "spans": [
+                {
+                  "traceId": "5B8EFFF798038103D269B633813FC60C",
+                  "spanId": "EEE19B7EC3C1B173",
+                  "parentSpanId": "",
+                  "name": "POST /orders",
+                  "kind": 2,
+                  "startTimeUnixNano": "1746259200000000000",
+                  "endTimeUnixNano": "1746259200145000000",
+                  "attributes": [
+                    {"key": "http.method", "value": {"stringValue": "POST"}},
+                    {"key": "http.route", "value": {"stringValue": "/orders"}},
+                    {"key": "http.status_code", "value": {"intValue": 201}}
+                  ],
+                  "status": {"code": 1}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

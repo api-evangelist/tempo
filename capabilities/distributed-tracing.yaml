@@ -1,0 +1,196 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Grafana Tempo Distributed Tracing"
+  description: "Distributed tracing workflow using the Grafana Tempo API for trace retrieval, TraceQL search, tag discovery, and trace-based metrics generation. Used by SREs, platform engineers, and developers to investigate performance issues and service dependencies."
+  tags:
+    - Distributed Tracing
+    - Observability
+    - OpenTelemetry
+    - Performance
+    - Debugging
+    - Grafana
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      TEMPO_BASE_URL: TEMPO_BASE_URL
+
+capability:
+  consumes:
+    - import: tempo
+      location: ./shared/tempo.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: distributed-tracing-api
+      description: "Unified REST API for Grafana Tempo distributed tracing operations."
+      resources:
+        - path: /v1/traces/{traceID}
+          name: traces
+          description: "Trace retrieval by ID"
+          operations:
+            - method: GET
+              name: get-trace
+              description: "Get a complete distributed trace by its trace ID"
+              call: "tempo.get-trace"
+              with:
+                traceID: "rest.traceID"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/search
+          name: search
+          description: "Trace search using TraceQL"
+          operations:
+            - method: GET
+              name: search-traces
+              description: "Search traces with TraceQL query"
+              call: "tempo.search-traces"
+              with:
+                q: "rest.q"
+                start: "rest.start"
+                end: "rest.end"
+                limit: "rest.limit"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/tags
+          name: tag-keys
+          description: "Tag key discovery"
+          operations:
+            - method: GET
+              name: list-tag-keys
+              description: "List all tag keys present in trace data"
+              call: "tempo.list-tag-keys"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/tags/{tagName}/values
+          name: tag-values
+          description: "Tag value discovery"
+          operations:
+            - method: GET
+              name: list-tag-values
+              description: "List distinct values for a tag key"
+              call: "tempo.list-tag-values"
+              with:
+                tagName: "rest.tagName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/metrics
+          name: metrics
+          description: "Trace-based metrics"
+          operations:
+            - method: GET
+              name: query-metrics
+              description: "Generate time-series metrics from trace data"
+              call: "tempo.query-metrics-range"
+              with:
+                q: "rest.q"
+                start: "rest.start"
+                end: "rest.end"
+                step: "rest.step"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: distributed-tracing-mcp
+      transport: http
+      description: "MCP server for AI-assisted distributed tracing investigation and performance analysis."
+      tools:
+        - name: get-trace
+          description: "Retrieve a complete distributed trace to see all service calls and latencies"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.get-trace"
+          with:
+            traceID: "tools.traceID"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: search-traces
+          description: "Search for traces matching a TraceQL query (e.g. find slow requests, errors)"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.search-traces"
+          with:
+            q: "tools.q"
+            start: "tools.start"
+            end: "tools.end"
+            limit: "tools.limit"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: find-error-traces
+          description: "Find traces with errors in a time window"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.search-traces"
+          with:
+            q: "{status=error}"
+            start: "tools.start"
+            end: "tools.end"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: find-slow-traces
+          description: "Find traces exceeding a minimum duration threshold"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.search-traces"
+          with:
+            minDuration: "tools.minDuration"
+            start: "tools.start"
+            end: "tools.end"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-tag-keys
+          description: "Discover all available trace attribute keys for building queries"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.list-tag-keys"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-tag-values
+          description: "List all values for a trace attribute (e.g. all service names)"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tempo.list-tag-values"
+          with:
+            tagName: "tools.tagName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: query-error-rate
+          description: "Generate error rate metrics for a service over time"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "tempo.query-metrics-range"
+          with:
+            q: "tools.metricsQuery"
+            start: "tools.start"
+            end: "tools.end"
+            step: "tools.step"
+          outputParameters:
+            - type: object
+              mapping: "$."

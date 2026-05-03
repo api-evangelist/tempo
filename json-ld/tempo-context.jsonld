@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "otel": "https://opentelemetry.io/otel/",
+    "tempo": "https://grafana.com/oss/tempo/",
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "SoftwareApplication": "schema:SoftwareApplication",
+    "trace": {
+      "@id": "otel:trace",
+      "@type": "@id"
+    },
+    "span": {
+      "@id": "otel:span",
+      "@type": "@id"
+    },
+    "traceId": {
+      "@id": "otel:traceId",
+      "@type": "schema:Text"
+    },
+    "spanId": {
+      "@id": "otel:spanId",
+      "@type": "schema:Text"
+    },
+    "parentSpanId": {
+      "@id": "otel:parentSpanId",
+      "@type": "schema:Text"
+    },
+    "operationName": {
+      "@id": "otel:operationName",
+      "@type": "schema:Text"
+    },
+    "startTime": {
+      "@id": "schema:startTime",
+      "@type": "schema:DateTime"
+    },
+    "endTime": {
+      "@id": "schema:endTime",
+      "@type": "schema:DateTime"
+    },
+    "duration": {
+      "@id": "schema:duration",
+      "@type": "schema:Duration"
+    },
+    "serviceName": {
+      "@id": "otel:serviceName",
+      "@type": "schema:Text"
+    },
+    "spanKind": {
+      "@id": "otel:spanKind",
+      "@type": "schema:Text"
+    },
+    "statusCode": {
+      "@id": "otel:statusCode",
+      "@type": "schema:Text"
+    },
+    "attributes": {
+      "@id": "otel:attributes",
+      "@type": "@id"
+    },
+    "resource": {
+      "@id": "otel:resource",
+      "@type": "@id"
+    },
+    "Tags": "schema:keywords",
+    "Documentation": "schema:documentation",
+    "Repository": "schema:codeRepository"
+  }
+}

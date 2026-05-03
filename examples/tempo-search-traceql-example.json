@@ -1,0 +1,51 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:3200/api/search",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "queryParameters": {
+      "q": "{.service.name=\"order-service\" && .http.status_code=500}",
+      "start": 1746255600,
+      "end": 1746259200,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "traces": [
+        {
+          "traceID": "5B8EFFF798038103D269B633813FC60C",
+          "rootServiceName": "order-service",
+          "rootTraceName": "POST /orders",
+          "startTimeUnixNano": "1746259100000000000",
+          "durationMs": 145,
+          "spanSets": [
+            {
+              "spans": [
+                {
+                  "spanID": "EEE19B7EC3C1B173",
+                  "startTimeUnixNano": "1746259100000000000",
+                  "durationNanos": 145000000,
+                  "attributes": [
+                    {"key": "http.status_code", "value": {"intValue": 500}}
+                  ]
+                }
+              ],
+              "matched": 1
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedTraces": 1247,
+        "inspectedBytes": "23847291"
+      }
+    }
+  }
+}

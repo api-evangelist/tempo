@@ -1,0 +1,93 @@
+extends: spectral:oas
+rules:
+
+  # Tempo API has no auth - all operations should be public (internal service)
+  tempo-no-auth-required:
+    description: Tempo HTTP API is an internal service API without authentication by design
+    message: "Tempo API operations should not require authentication — it is an internal service"
+    severity: info
+    given: "$.paths[*][get,post,put,delete].security"
+    then:
+      function: falsy
+
+  # Enforce operation IDs
+  tempo-operation-id-required:
+    description: All operations must have an operationId
+    message: "Operation is missing operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  # Enforce camelCase operation IDs
+  tempo-operation-id-camel-case:
+    description: OperationIds should use camelCase
+    message: "operationId '{{value}}' should use camelCase"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  # Enforce Title Case summaries
+  tempo-summary-title-case:
+    description: Operation summaries must use Title Case
+    message: "Summary '{{value}}' should use Title Case"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9 ]+$"
+
+  # Enforce tags
+  tempo-operation-tags-required:
+    description: All operations must have at least one tag
+    message: "Operation is missing tags"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  # Enforce descriptions
+  tempo-operation-description-required:
+    description: All operations must have a description
+    message: "Operation is missing a description"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: description
+      function: truthy
+
+  # TraceID path parameters should have hex pattern validation
+  tempo-traceid-pattern:
+    description: traceID path parameters should enforce hex format
+    message: "traceID parameter should have hex format pattern"
+    severity: warn
+    given: "$.paths[*].parameters[?(@.name=='traceID')].schema"
+    then:
+      field: pattern
+      function: truthy
+
+  # Server URLs required
+  tempo-server-urls-required:
+    description: API spec must define server URLs
+    message: "API spec is missing server definitions"
+    severity: error
+    given: "$"
+    then:
+      field: servers
+      function: truthy
+
+  # 200 responses must have schemas
+  tempo-success-response-schema:
+    description: Successful responses should include a schema
+    message: "200 response is missing a schema"
+    severity: warn
+    given: "$.paths[*][get].responses.200.content.application/json"
+    then:
+      field: schema
+      function: truthy
