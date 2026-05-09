@@ -3,11 +3,12 @@
   "feeds": [
     {
       "source": "https://grafana.com/blog/tag/traces/",
-      "feed_url": "https://grafana.com/blog/index.xml",
-      "saved": 10,
-      "title": "Grafana Labs blog on Grafana Labs"
+      "feed_url": "",
+      "title": "",
+      "saved": 0,
+      "error": "no_feed"
     }
   ],
   "post_count": 10,
-  "fetched": "2026-05-03T23:37:57Z"
+  "fetched": "2026-05-09T20:17:51Z"
 }
