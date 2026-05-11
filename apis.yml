@@ -95,6 +95,10 @@ common:
   - type: Vocabulary
     url: vocabulary/tempo-vocabulary.yml
 
+  - type: Integrations
+    url: https://grafana.com/integrations/
+integrations:
+  - name: All visualization integrations
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
