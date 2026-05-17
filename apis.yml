@@ -33,7 +33,7 @@ apis:
     properties:
       - type: Documentation
         url: https://grafana.com/docs/tempo/latest/api_docs/
-      - type: GitHub Repository
+      - type: GitHubRepository
         url: https://github.com/grafana/tempo
       - type: OpenAPI
         url: openapi/tempo-openapi.yml
@@ -62,15 +62,15 @@ common:
     url: https://grafana.com/oss/tempo/
   - type: Documentation
     url: https://grafana.com/docs/tempo/latest/
-  - type: GitHub Repository
+  - type: GitHubRepository
     url: https://github.com/grafana/tempo
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/grafana
   - type: Helm Chart
     url: https://grafana.github.io/helm-charts
   - type: Docker Hub
     url: https://hub.docker.com/r/grafana/tempo
-  - type: Release Notes
+  - type: ReleaseNotes
     url: https://github.com/grafana/tempo/releases
   - type: Community
     url: https://community.grafana.com/c/grafana-tempo/
@@ -78,11 +78,11 @@ common:
     url: https://grafana.slack.com/archives/C01BULREPHA
   - type: Blog
     url: https://grafana.com/blog/tag/traces/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://grafana.com/docs/tempo/latest/getting-started/
   - type: OpenAPI
     url: openapi/tempo-openapi.yml
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/tempo-context.jsonld
   - type: JSONSchema
     url: json-schema/tempo-trace-schema.json
