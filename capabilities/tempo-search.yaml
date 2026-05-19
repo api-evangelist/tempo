@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Grafana Tempo HTTP API — Search
+  description: 'Grafana Tempo HTTP API — Search. 1 operations. Lead operation: Search Traces. Self-contained Naftiko capability
+    covering one Tempo business surface.'
+  tags:
+  - Tempo
+  - Search
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TEMPO_API_KEY: TEMPO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: tempo-search
+    baseUri: http://localhost:3200
+    description: Grafana Tempo HTTP API — Search business capability. Self-contained, no shared references.
+    resources:
+    - name: api-search
+      path: /api/search
+      operations:
+      - name: searchtraces
+        method: GET
+        description: Search Traces
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: TraceQL query string
+        - name: tags
+          in: query
+          type: string
+          description: 'URL-encoded logfmt tag filter (deprecated — use q with TraceQL instead). Example: service.name=frontend'
+        - name: minDuration
+          in: query
+          type: string
+          description: Minimum trace duration filter (e.g., 100ms, 1s, 2m)
+        - name: maxDuration
+          in: query
+          type: string
+          description: Maximum trace duration filter (e.g., 100ms, 1s, 2m)
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of search results to return
+        - name: start
+          in: query
+          type: integer
+          description: Unix epoch start time for search window (seconds)
+        - name: end
+          in: query
+          type: integer
+          description: Unix epoch end time for search window (seconds)
+  exposes:
+  - type: rest
+    namespace: tempo-search-rest
+    port: 8080
+    description: REST adapter for Grafana Tempo HTTP API — Search. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/search
+      name: api-search
+      description: REST surface for api-search.
+      operations:
+      - method: GET
+        name: searchtraces
+        description: Search Traces
+        call: tempo-search.searchtraces
+        with:
+          q: rest.q
+          tags: rest.tags
+          minDuration: rest.minDuration
+          maxDuration: rest.maxDuration
+          limit: rest.limit
+          start: rest.start
+          end: rest.end
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: tempo-search-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Grafana Tempo HTTP API — Search. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: search-traces
+      description: Search Traces
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: tempo-search.searchtraces
+      with:
+        q: tools.q
+        tags: tools.tags
+        minDuration: tools.minDuration
+        maxDuration: tools.maxDuration
+        limit: tools.limit
+        start: tools.start
+        end: tools.end
+      outputParameters:
+      - type: object
+        mapping: $.

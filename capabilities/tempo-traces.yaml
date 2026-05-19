@@ -1,0 +1,89 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Grafana Tempo HTTP API — Traces
+  description: 'Grafana Tempo HTTP API — Traces. 1 operations. Lead operation: Get Trace By ID. Self-contained Naftiko capability
+    covering one Tempo business surface.'
+  tags:
+  - Tempo
+  - Traces
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TEMPO_API_KEY: TEMPO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: tempo-traces
+    baseUri: http://localhost:3200
+    description: Grafana Tempo HTTP API — Traces business capability. Self-contained, no shared references.
+    resources:
+    - name: api-traces-traceID
+      path: /api/traces/{traceID}
+      operations:
+      - name: gettrace
+        method: GET
+        description: Get Trace By ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: traceID
+          in: path
+          type: string
+          description: Hexadecimal trace identifier
+          required: true
+        - name: start
+          in: query
+          type: integer
+          description: Unix epoch start time for search window (seconds)
+        - name: end
+          in: query
+          type: integer
+          description: Unix epoch end time for search window (seconds)
+  exposes:
+  - type: rest
+    namespace: tempo-traces-rest
+    port: 8080
+    description: REST adapter for Grafana Tempo HTTP API — Traces. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/api/traces/{traceid}
+      name: api-traces-traceid
+      description: REST surface for api-traces-traceID.
+      operations:
+      - method: GET
+        name: gettrace
+        description: Get Trace By ID
+        call: tempo-traces.gettrace
+        with:
+          traceID: rest.traceID
+          start: rest.start
+          end: rest.end
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: tempo-traces-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Grafana Tempo HTTP API — Traces. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-trace-id
+      description: Get Trace By ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: tempo-traces.gettrace
+      with:
+        traceID: tools.traceID
+        start: tools.start
+        end: tools.end
+      outputParameters:
+      - type: object
+        mapping: $.
