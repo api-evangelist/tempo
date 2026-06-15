@@ -1,0 +1,263 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Traces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Trace By ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/traces/:traceID",
+            "params": [
+              {
+                "name": "traceID",
+                "value": "",
+                "type": "path",
+                "description": "Hexadecimal trace identifier"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time for search window (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time for search window (seconds)"
+              }
+            ]
+          },
+          "docs": "Retrieve a complete trace by its trace ID. Returns all spans belonging to the trace in JSON format. Supports deep object storage search when the trace is not in recent cache."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search",
+            "params": [
+              {
+                "name": "q",
+                "value": "{.service.name=\"order-service\"}",
+                "type": "query",
+                "description": "TraceQL query string"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded logfmt tag filter (deprecated — use q with TraceQL instead). Example: service.name=frontend"
+              },
+              {
+                "name": "minDuration",
+                "value": "",
+                "type": "query",
+                "description": "Minimum trace duration filter (e.g., 100ms, 1s, 2m)"
+              },
+              {
+                "name": "maxDuration",
+                "value": "",
+                "type": "query",
+                "description": "Maximum trace duration filter (e.g., 100ms, 1s, 2m)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of search results to return"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time for search window (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time for search window (seconds)"
+              }
+            ]
+          },
+          "docs": "Search for traces matching a TraceQL query or tag-based filter. Returns a list of matching trace metadata with root span information, duration, and service names."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tag Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search/tags",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Attribute scope filter (span, resource, intrinsic)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time"
+              }
+            ]
+          },
+          "docs": "Returns all tag keys (span attribute names) present in the trace data within the configured search window. Useful for building search UIs and TraceQL autocomplete."
+        },
+        {
+          "info": {
+            "name": "List Tag Values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search/tag/:tagName/values",
+            "params": [
+              {
+                "name": "tagName",
+                "value": "service.name",
+                "type": "path",
+                "description": "Tag key name to retrieve values for"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "TraceQL query context for filtering tag values"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time"
+              }
+            ]
+          },
+          "docs": "Returns all distinct values for a specific tag key within the trace data. Used for building search filter dropdowns and TraceQL query autocomplete."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query Metrics Range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/metrics/query_range",
+            "params": [
+              {
+                "name": "q",
+                "value": "rate({.service.name=\"order-service\"}[5m])",
+                "type": "query",
+                "description": "TraceQL metrics query expression"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start time as Unix epoch (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End time as Unix epoch (seconds)"
+              },
+              {
+                "name": "step",
+                "value": "",
+                "type": "query",
+                "description": "Query step interval (e.g., 30s, 1m, 5m)"
+              }
+            ]
+          },
+          "docs": "Generate time-series metrics from trace data using TraceQL metrics queries. Supports span rate, error rate, duration histograms, and custom metric generation from trace attributes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check Readiness",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/ready"
+          },
+          "docs": "Readiness probe endpoint. Returns 200 OK when Tempo is ready to serve requests. Used by Kubernetes readiness probes and load balancers."
+        },
+        {
+          "info": {
+            "name": "Get Prometheus Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/metrics"
+          },
+          "docs": "Exposes Tempo's own operational Prometheus metrics including ingestion rate, query latency, cache hit rates, and storage backend metrics. Scraped by Prometheus or Grafana Agent for Tempo self-monitoring."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
