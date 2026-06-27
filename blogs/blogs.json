@@ -2,8 +2,11 @@
   "repo": "tempo",
   "feeds": [
     {
-      "source": "https://grafana.com/blog/tag/traces/",
-      "error": "HTTPError"
+      "source": "https://grafana.com/blog/index.xml",
+      "feed_url": "https://grafana.com/blog/index.xml",
+      "title": "",
+      "saved": 2,
+      "method": "feed"
     },
     {
       "source": "https://grafana.slack.com/archives/C01BULREPHA",
@@ -13,6 +16,6 @@
       "method": "none"
     }
   ],
-  "post_count": 10,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 12,
+  "fetched": "2026-06-27T12:03:07Z"
 }
