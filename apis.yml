@@ -52,6 +52,10 @@ apis:
       - type: Reference
         url: https://grafana.com/docs/tempo/latest/traceql/query-editor/
 common:
+  - type: TrustCenter
+    url: security/tempo-trust-center.yml
+  - type: DomainSecurity
+    url: security/tempo-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/tempohq
   - type: Website
