@@ -52,6 +52,8 @@ apis:
       - type: Reference
         url: https://grafana.com/docs/tempo/latest/traceql/query-editor/
 common:
+  - type: AgenticAccess
+    url: agentic-access/tempo-agentic-access.yml
   - type: TrustCenter
     url: security/tempo-trust-center.yml
   - type: DomainSecurity
