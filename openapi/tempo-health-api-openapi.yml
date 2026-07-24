@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP Health API
+  description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: 2.x
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:3200
+  description: Local Tempo instance (default)
+- url: http://tempo:3200
+  description: Kubernetes service endpoint
+tags:
+- name: Health
+  description: Health and readiness endpoints
+paths:
+  /ready:
+    get:
+      operationId: checkReady
+      summary: Check Readiness
+      description: Readiness probe endpoint. Returns 200 OK when Tempo is ready to serve requests. Used by Kubernetes readiness probes and load balancers.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Tempo is ready
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ready
+        '500':
+          description: Tempo is not yet ready
+  /metrics:
+    get:
+      operationId: getPrometheusMetrics
+      summary: Get Prometheus Metrics
+      description: Exposes Tempo's own operational Prometheus metrics including ingestion rate, query latency, cache hit rates, and storage backend metrics. Scraped by Prometheus or Grafana Agent for Tempo self-monitoring.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Prometheus metrics in text exposition format
+          content:
+            text/plain:
+              schema:
+                type: string
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/

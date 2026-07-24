@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP Health Metrics API
+  description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: 2.x
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:3200
+  description: Local Tempo instance (default)
+- url: http://tempo:3200
+  description: Kubernetes service endpoint
+tags:
+- name: Metrics
+  description: Generate metrics from trace data
+paths:
+  /api/metrics/query_range:
+    get:
+      operationId: queryMetricsRange
+      summary: Query Metrics Range
+      description: Generate time-series metrics from trace data using TraceQL metrics queries. Supports span rate, error rate, duration histograms, and custom metric generation from trace attributes.
+      tags:
+      - Metrics
+      parameters:
+      - name: q
+        in: query
+        required: true
+        description: TraceQL metrics query expression
+        schema:
+          type: string
+        example: rate({.service.name="order-service"}[5m])
+      - name: start
+        in: query
+        required: true
+        description: Start time as Unix epoch (seconds)
+        schema:
+          type: integer
+          format: int64
+      - name: end
+        in: query
+        required: true
+        description: End time as Unix epoch (seconds)
+        schema:
+          type: integer
+          format: int64
+      - name: step
+        in: query
+        required: false
+        description: Query step interval (e.g., 30s, 1m, 5m)
+        schema:
+          type: string
+          default: 1m
+      responses:
+        '200':
+          description: Metrics time-series data returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResult'
+        '400':
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
+    MetricsResult:
+      type: object
+      description: Time-series metrics generated from trace data
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - error
+        data:
+          type: object
+          properties:
+            resultType:
+              type: string
+              enum:
+              - matrix
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  metric:
+                    type: object
+                    description: Metric label set
+                  values:
+                    type: array
+                    description: Time-value pairs
+                    items:
+                      type: array
+                      items:
+                        oneOf:
+                        - type: integer
+                        - type: string
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/

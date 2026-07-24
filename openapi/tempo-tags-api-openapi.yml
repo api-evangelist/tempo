@@ -1,0 +1,132 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP Health Tags API
+  description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: 2.x
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:3200
+  description: Local Tempo instance (default)
+- url: http://tempo:3200
+  description: Kubernetes service endpoint
+tags:
+- name: Tags
+  description: Discover tag keys and values in trace data
+paths:
+  /api/search/tags:
+    get:
+      operationId: listTagKeys
+      summary: List Tag Keys
+      description: Returns all tag keys (span attribute names) present in the trace data within the configured search window. Useful for building search UIs and TraceQL autocomplete.
+      tags:
+      - Tags
+      parameters:
+      - name: scope
+        in: query
+        required: false
+        description: Attribute scope filter (span, resource, intrinsic)
+        schema:
+          type: string
+          enum:
+          - span
+          - resource
+          - intrinsic
+      - name: start
+        in: query
+        required: false
+        description: Unix epoch start time
+        schema:
+          type: integer
+          format: int64
+      - name: end
+        in: query
+        required: false
+        description: Unix epoch end time
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Tag keys returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagKeysResult'
+  /api/search/tag/{tagName}/values:
+    get:
+      operationId: listTagValues
+      summary: List Tag Values
+      description: Returns all distinct values for a specific tag key within the trace data. Used for building search filter dropdowns and TraceQL query autocomplete.
+      tags:
+      - Tags
+      parameters:
+      - name: tagName
+        in: path
+        required: true
+        description: Tag key name to retrieve values for
+        schema:
+          type: string
+        example: service.name
+      - name: q
+        in: query
+        required: false
+        description: TraceQL query context for filtering tag values
+        schema:
+          type: string
+      - name: start
+        in: query
+        required: false
+        description: Unix epoch start time
+        schema:
+          type: integer
+          format: int64
+      - name: end
+        in: query
+        required: false
+        description: Unix epoch end time
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Tag values returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagValuesResult'
+components:
+  schemas:
+    TagValuesResult:
+      type: object
+      description: Distinct values for a tag key
+      properties:
+        tagValues:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+    TagKeysResult:
+      type: object
+      description: List of tag keys present in trace data
+      properties:
+        tagNames:
+          type: array
+          items:
+            type: string
+          example:
+          - service.name
+          - http.method
+          - db.system
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/

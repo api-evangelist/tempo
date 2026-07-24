@@ -1,0 +1,141 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP Health Search API
+  description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: 2.x
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:3200
+  description: Local Tempo instance (default)
+- url: http://tempo:3200
+  description: Kubernetes service endpoint
+tags:
+- name: Search
+  description: Search traces and spans using TraceQL
+paths:
+  /api/search:
+    get:
+      operationId: searchTraces
+      summary: Search Traces
+      description: Search for traces matching a TraceQL query or tag-based filter. Returns a list of matching trace metadata with root span information, duration, and service names.
+      tags:
+      - Search
+      parameters:
+      - name: q
+        in: query
+        required: false
+        description: TraceQL query string
+        schema:
+          type: string
+        example: '{.service.name="order-service"}'
+      - name: tags
+        in: query
+        required: false
+        description: 'URL-encoded logfmt tag filter (deprecated — use q with TraceQL instead). Example: service.name=frontend'
+        schema:
+          type: string
+      - name: minDuration
+        in: query
+        required: false
+        description: Minimum trace duration filter (e.g., 100ms, 1s, 2m)
+        schema:
+          type: string
+      - name: maxDuration
+        in: query
+        required: false
+        description: Maximum trace duration filter (e.g., 100ms, 1s, 2m)
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        description: Maximum number of search results to return
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 20
+      - name: start
+        in: query
+        required: false
+        description: Unix epoch start time for search window (seconds)
+        schema:
+          type: integer
+          format: int64
+      - name: end
+        in: query
+        required: false
+        description: Unix epoch end time for search window (seconds)
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Search results returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
+    TraceSearchResult:
+      type: object
+      description: Summary of a trace matching a search query
+      properties:
+        traceID:
+          type: string
+          description: Trace identifier
+        rootServiceName:
+          type: string
+          description: Name of the root span's service
+        rootTraceName:
+          type: string
+          description: Name of the root span's operation
+        startTimeUnixNano:
+          type: string
+          description: Trace start time (nanoseconds)
+        durationMs:
+          type: integer
+          description: Total trace duration in milliseconds
+        spanSets:
+          type: array
+          description: Matching span sets (from TraceQL queries)
+          items:
+            type: object
+    SearchResult:
+      type: object
+      description: Trace search results
+      properties:
+        traces:
+          type: array
+          items:
+            $ref: '#/components/schemas/TraceSearchResult'
+        metrics:
+          type: object
+          properties:
+            inspectedTraces:
+              type: integer
+            inspectedBytes:
+              type: string
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/

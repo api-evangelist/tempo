@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP Health Traces API
+  description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: 2.x
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:3200
+  description: Local Tempo instance (default)
+- url: http://tempo:3200
+  description: Kubernetes service endpoint
+tags:
+- name: Traces
+  description: Retrieve individual traces by trace ID
+paths:
+  /api/traces/{traceID}:
+    get:
+      operationId: getTrace
+      summary: Get Trace By ID
+      description: Retrieve a complete trace by its trace ID. Returns all spans belonging to the trace in JSON format. Supports deep object storage search when the trace is not in recent cache.
+      tags:
+      - Traces
+      parameters:
+      - name: traceID
+        in: path
+        required: true
+        description: Hexadecimal trace identifier
+        schema:
+          type: string
+          pattern: ^[0-9a-fA-F]{16,32}$
+      - name: start
+        in: query
+        required: false
+        description: Unix epoch start time for search window (seconds)
+        schema:
+          type: integer
+          format: int64
+      - name: end
+        in: query
+        required: false
+        description: Unix epoch end time for search window (seconds)
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Trace found and returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trace'
+        '404':
+          description: Trace not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
+    KeyValue:
+      type: object
+      description: An attribute key-value pair
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+    Trace:
+      type: object
+      description: A complete distributed trace containing all spans
+      properties:
+        batches:
+          type: array
+          description: OTLP resource span batches
+          items:
+            type: object
+            properties:
+              resource:
+                type: object
+                description: Resource attributes (service name, version, etc.)
+                properties:
+                  attributes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KeyValue'
+              scopeSpans:
+                type: array
+                description: Spans grouped by instrumentation scope
+                items:
+                  type: object
+                  properties:
+                    scope:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        version:
+                          type: string
+                    spans:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Span'
+    Span:
+      type: object
+      description: A single operation within a distributed trace
+      properties:
+        traceId:
+          type: string
+          description: Trace identifier (hex)
+        spanId:
+          type: string
+          description: Span identifier (hex)
+        parentSpanId:
+          type: string
+          description: Parent span identifier (hex)
+        name:
+          type: string
+          description: Operation name
+        kind:
+          type: integer
+          description: Span kind (0=unspecified, 1=internal, 2=server, 3=client, 4=producer, 5=consumer)
+        startTimeUnixNano:
+          type: string
+          description: Start time in nanoseconds since Unix epoch
+        endTimeUnixNano:
+          type: string
+          description: End time in nanoseconds since Unix epoch
+        attributes:
+          type: array
+          description: Span attributes
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        status:
+          type: object
+          description: Span status
+          properties:
+            code:
+              type: integer
+              description: Status code (0=unset, 1=ok, 2=error)
+            message:
+              type: string
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/
