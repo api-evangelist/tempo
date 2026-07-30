@@ -1,3 +1,16 @@
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/tempo.png
 name: Tempo
 description: >-
   Tempo is an open source, high-scale distributed tracing backend from Grafana Labs. Designed for cost-efficient, object
@@ -15,42 +28,93 @@ tags:
   - Grafana
   - Monitoring
 apis:
-  - name: Tempo HTTP API
-    description: >-
-      Tempo exposes an HTTP API for querying traces, searching spans, discovering tag keys and values, and generating
-      metrics from trace data. The API is compatible with Jaeger and Zipkin query protocols in addition to the native
-      Tempo protocol. Used by Grafana dashboards, the Tempo CLI, and external integrations.
-    humanURL: https://grafana.com/docs/tempo/latest/api_docs/
-    baseURL: http://localhost:3200
-    tags:
-      - Distributed Tracing
-      - Observability
-      - Trace Querying
-      - OpenTelemetry
-    properties:
-      - type: Documentation
-        url: https://grafana.com/docs/tempo/latest/api_docs/
-      - type: GitHubRepository
-        url: https://github.com/grafana/tempo
-      - type: OpenAPI
-        url: openapi/tempo-openapi.yml
-  - name: Tempo TraceQL API
-    description: >-
-      TraceQL is a query language developed for Grafana Tempo that allows filtering and selecting spans within traces.
-      The TraceQL search API endpoint enables rich span-level filtering using a pipeline syntax with attribute matchers,
-      duration filters, and structural operators.
-    humanURL: https://grafana.com/docs/tempo/latest/traceql/
-    baseURL: http://localhost:3200
-    tags:
-      - Distributed Tracing
-      - Query Language
-      - TraceQL
-      - Observability
-    properties:
-      - type: Documentation
-        url: https://grafana.com/docs/tempo/latest/traceql/
-      - type: Reference
-        url: https://grafana.com/docs/tempo/latest/traceql/query-editor/
+- name: Tempo TraceQL API
+  description: >-
+    TraceQL is a query language developed for Grafana Tempo that allows filtering and selecting spans
+    within traces. The TraceQL search API endpoint enables rich span-level filtering using a pipeline
+    syntax with attribute matchers, duration filters, and structural operators.
+  humanURL: https://grafana.com/docs/tempo/latest/traceql/
+  baseURL: http://localhost:3200
+  tags:
+  - Distributed Tracing
+  - Query Language
+  - TraceQL
+  - Observability
+  properties:
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/traceql/
+  - type: Reference
+    url: https://grafana.com/docs/tempo/latest/traceql/query-editor/
+- aid: tempo:tempo-health-api
+  name: Tempo Health API
+  description: Health and readiness endpoints
+  humanURL: https://grafana.com/docs/tempo/latest/api_docs/
+  baseURL: http://localhost:3200
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/tempo-health-api-openapi.yml
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/api_docs/
+  - type: GitHubRepository
+    url: https://github.com/grafana/tempo
+- aid: tempo:tempo-metrics-api
+  name: Tempo Metrics API
+  description: Generate metrics from trace data
+  humanURL: https://grafana.com/docs/tempo/latest/api_docs/
+  baseURL: http://localhost:3200
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/tempo-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/api_docs/
+  - type: GitHubRepository
+    url: https://github.com/grafana/tempo
+- aid: tempo:tempo-search-api
+  name: Tempo Search API
+  description: Search traces and spans using TraceQL
+  humanURL: https://grafana.com/docs/tempo/latest/api_docs/
+  baseURL: http://localhost:3200
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/tempo-search-api-openapi.yml
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/api_docs/
+  - type: GitHubRepository
+    url: https://github.com/grafana/tempo
+- aid: tempo:tempo-tags-api
+  name: Tempo Tags API
+  description: Discover tag keys and values in trace data
+  humanURL: https://grafana.com/docs/tempo/latest/api_docs/
+  baseURL: http://localhost:3200
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/tempo-tags-api-openapi.yml
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/api_docs/
+  - type: GitHubRepository
+    url: https://github.com/grafana/tempo
+- aid: tempo:tempo-traces-api
+  name: Tempo Traces API
+  description: Retrieve individual traces by trace ID
+  humanURL: https://grafana.com/docs/tempo/latest/api_docs/
+  baseURL: http://localhost:3200
+  tags:
+  - Traces
+  properties:
+  - type: OpenAPI
+    url: openapi/tempo-traces-api-openapi.yml
+  - type: Documentation
+    url: https://grafana.com/docs/tempo/latest/api_docs/
+  - type: GitHubRepository
+    url: https://github.com/grafana/tempo
 common:
   - type: AgenticAccess
     url: agentic-access/tempo-agentic-access.yml
