@@ -1,0 +1,22 @@
+{
+  "provider": "tempo",
+  "sources": [
+    "tempo-health-api-openapi.yml",
+    "tempo-metrics-api-openapi.yml",
+    "tempo-search-api-openapi.yml",
+    "tempo-tags-api-openapi.yml",
+    "tempo-traces-api-openapi.yml"
+  ],
+  "outputs": [
+    "tempo-health-api-openapi.yml",
+    "tempo-metrics-api-openapi.yml",
+    "tempo-search-api-openapi.yml",
+    "tempo-tags-api-openapi.yml",
+    "tempo-traces-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

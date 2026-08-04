@@ -1,0 +1,523 @@
+openapi: 3.1.0
+info:
+  title: Grafana Tempo HTTP API
+  description: >-
+    The Grafana Tempo HTTP API provides endpoints for querying distributed traces,
+    searching spans with TraceQL, discovering tag keys and values, and generating
+    metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry
+    trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
+  version: '2.x'
+  contact:
+    name: Grafana Tempo Community
+    url: https://community.grafana.com/c/grafana-tempo/
+    email: tempo@grafana.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+externalDocs:
+  description: Grafana Tempo API Documentation
+  url: https://grafana.com/docs/tempo/latest/api_docs/
+servers:
+  - url: http://localhost:3200
+    description: Local Tempo instance (default)
+  - url: http://tempo:3200
+    description: Kubernetes service endpoint
+tags:
+  - name: Traces
+    description: Retrieve individual traces by trace ID
+  - name: Search
+    description: Search traces and spans using TraceQL
+  - name: Tags
+    description: Discover tag keys and values in trace data
+  - name: Metrics
+    description: Generate metrics from trace data
+  - name: Health
+    description: Health and readiness endpoints
+paths:
+  /api/traces/{traceID}:
+    get:
+      operationId: getTrace
+      summary: Get Trace By ID
+      description: >-
+        Retrieve a complete trace by its trace ID. Returns all spans belonging
+        to the trace in JSON format. Supports deep object storage search when
+        the trace is not in recent cache.
+      tags:
+        - Traces
+      parameters:
+        - name: traceID
+          in: path
+          required: true
+          description: Hexadecimal trace identifier
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{16,32}$'
+        - name: start
+          in: query
+          required: false
+          description: Unix epoch start time for search window (seconds)
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          required: false
+          description: Unix epoch end time for search window (seconds)
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Trace found and returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trace'
+        '404':
+          description: Trace not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/search:
+    get:
+      operationId: searchTraces
+      summary: Search Traces
+      description: >-
+        Search for traces matching a TraceQL query or tag-based filter. Returns
+        a list of matching trace metadata with root span information, duration,
+        and service names.
+      tags:
+        - Search
+      parameters:
+        - name: q
+          in: query
+          required: false
+          description: TraceQL query string
+          schema:
+            type: string
+          example: '{.service.name="order-service"}'
+        - name: tags
+          in: query
+          required: false
+          description: >-
+            URL-encoded logfmt tag filter (deprecated — use q with TraceQL
+            instead). Example: service.name=frontend
+          schema:
+            type: string
+        - name: minDuration
+          in: query
+          required: false
+          description: Minimum trace duration filter (e.g., 100ms, 1s, 2m)
+          schema:
+            type: string
+        - name: maxDuration
+          in: query
+          required: false
+          description: Maximum trace duration filter (e.g., 100ms, 1s, 2m)
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of search results to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 20
+        - name: start
+          in: query
+          required: false
+          description: Unix epoch start time for search window (seconds)
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          required: false
+          description: Unix epoch end time for search window (seconds)
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Search results returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '400':
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/search/tags:
+    get:
+      operationId: listTagKeys
+      summary: List Tag Keys
+      description: >-
+        Returns all tag keys (span attribute names) present in the trace data
+        within the configured search window. Useful for building search UIs
+        and TraceQL autocomplete.
+      tags:
+        - Tags
+      parameters:
+        - name: scope
+          in: query
+          required: false
+          description: Attribute scope filter (span, resource, intrinsic)
+          schema:
+            type: string
+            enum: [span, resource, intrinsic]
+        - name: start
+          in: query
+          required: false
+          description: Unix epoch start time
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          required: false
+          description: Unix epoch end time
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Tag keys returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagKeysResult'
+
+  /api/search/tag/{tagName}/values:
+    get:
+      operationId: listTagValues
+      summary: List Tag Values
+      description: >-
+        Returns all distinct values for a specific tag key within the trace data.
+        Used for building search filter dropdowns and TraceQL query autocomplete.
+      tags:
+        - Tags
+      parameters:
+        - name: tagName
+          in: path
+          required: true
+          description: Tag key name to retrieve values for
+          schema:
+            type: string
+          example: service.name
+        - name: q
+          in: query
+          required: false
+          description: TraceQL query context for filtering tag values
+          schema:
+            type: string
+        - name: start
+          in: query
+          required: false
+          description: Unix epoch start time
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          required: false
+          description: Unix epoch end time
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Tag values returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagValuesResult'
+
+  /api/metrics/query_range:
+    get:
+      operationId: queryMetricsRange
+      summary: Query Metrics Range
+      description: >-
+        Generate time-series metrics from trace data using TraceQL metrics queries.
+        Supports span rate, error rate, duration histograms, and custom metric
+        generation from trace attributes.
+      tags:
+        - Metrics
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: TraceQL metrics query expression
+          schema:
+            type: string
+          example: 'rate({.service.name="order-service"}[5m])'
+        - name: start
+          in: query
+          required: true
+          description: Start time as Unix epoch (seconds)
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          required: true
+          description: End time as Unix epoch (seconds)
+          schema:
+            type: integer
+            format: int64
+        - name: step
+          in: query
+          required: false
+          description: Query step interval (e.g., 30s, 1m, 5m)
+          schema:
+            type: string
+            default: "1m"
+      responses:
+        '200':
+          description: Metrics time-series data returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResult'
+        '400':
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ready:
+    get:
+      operationId: checkReady
+      summary: Check Readiness
+      description: >-
+        Readiness probe endpoint. Returns 200 OK when Tempo is ready to serve
+        requests. Used by Kubernetes readiness probes and load balancers.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Tempo is ready
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "ready"
+        '500':
+          description: Tempo is not yet ready
+
+  /metrics:
+    get:
+      operationId: getPrometheusMetrics
+      summary: Get Prometheus Metrics
+      description: >-
+        Exposes Tempo's own operational Prometheus metrics including ingestion
+        rate, query latency, cache hit rates, and storage backend metrics.
+        Scraped by Prometheus or Grafana Agent for Tempo self-monitoring.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Prometheus metrics in text exposition format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    Trace:
+      type: object
+      description: A complete distributed trace containing all spans
+      properties:
+        batches:
+          type: array
+          description: OTLP resource span batches
+          items:
+            type: object
+            properties:
+              resource:
+                type: object
+                description: Resource attributes (service name, version, etc.)
+                properties:
+                  attributes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KeyValue'
+              scopeSpans:
+                type: array
+                description: Spans grouped by instrumentation scope
+                items:
+                  type: object
+                  properties:
+                    scope:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        version:
+                          type: string
+                    spans:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Span'
+
+    Span:
+      type: object
+      description: A single operation within a distributed trace
+      properties:
+        traceId:
+          type: string
+          description: Trace identifier (hex)
+        spanId:
+          type: string
+          description: Span identifier (hex)
+        parentSpanId:
+          type: string
+          description: Parent span identifier (hex)
+        name:
+          type: string
+          description: Operation name
+        kind:
+          type: integer
+          description: Span kind (0=unspecified, 1=internal, 2=server, 3=client, 4=producer, 5=consumer)
+        startTimeUnixNano:
+          type: string
+          description: Start time in nanoseconds since Unix epoch
+        endTimeUnixNano:
+          type: string
+          description: End time in nanoseconds since Unix epoch
+        attributes:
+          type: array
+          description: Span attributes
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        status:
+          type: object
+          description: Span status
+          properties:
+            code:
+              type: integer
+              description: Status code (0=unset, 1=ok, 2=error)
+            message:
+              type: string
+
+    KeyValue:
+      type: object
+      description: An attribute key-value pair
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+
+    SearchResult:
+      type: object
+      description: Trace search results
+      properties:
+        traces:
+          type: array
+          items:
+            $ref: '#/components/schemas/TraceSearchResult'
+        metrics:
+          type: object
+          properties:
+            inspectedTraces:
+              type: integer
+            inspectedBytes:
+              type: string
+
+    TraceSearchResult:
+      type: object
+      description: Summary of a trace matching a search query
+      properties:
+        traceID:
+          type: string
+          description: Trace identifier
+        rootServiceName:
+          type: string
+          description: Name of the root span's service
+        rootTraceName:
+          type: string
+          description: Name of the root span's operation
+        startTimeUnixNano:
+          type: string
+          description: Trace start time (nanoseconds)
+        durationMs:
+          type: integer
+          description: Total trace duration in milliseconds
+        spanSets:
+          type: array
+          description: Matching span sets (from TraceQL queries)
+          items:
+            type: object
+
+    TagKeysResult:
+      type: object
+      description: List of tag keys present in trace data
+      properties:
+        tagNames:
+          type: array
+          items:
+            type: string
+          example: ["service.name", "http.method", "db.system"]
+
+    TagValuesResult:
+      type: object
+      description: Distinct values for a tag key
+      properties:
+        tagValues:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              value:
+                type: string
+
+    MetricsResult:
+      type: object
+      description: Time-series metrics generated from trace data
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        data:
+          type: object
+          properties:
+            resultType:
+              type: string
+              enum: [matrix]
+            result:
+              type: array
+              items:
+                type: object
+                properties:
+                  metric:
+                    type: object
+                    description: Metric label set
+                  values:
+                    type: array
+                    description: Time-value pairs
+                    items:
+                      type: array
+                      items:
+                        oneOf:
+                          - type: integer
+                          - type: string
+
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
