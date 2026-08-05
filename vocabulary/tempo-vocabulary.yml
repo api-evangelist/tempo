@@ -91,7 +91,7 @@ domains:
         tags: [TraceQL, Query Language]
 
       - term: Span Selector
-        definition: The curly brace syntax in TraceQL for filtering spans based on attributes. Example: {.service.name="frontend" && .http.status_code=500}
+        definition: "The curly brace syntax in TraceQL for filtering spans based on attributes. Example: {.service.name=\"frontend\" && .http.status_code=500}"
         tags: [TraceQL]
 
       - term: Pipeline
@@ -99,11 +99,11 @@ domains:
         tags: [TraceQL]
 
       - term: Structural Operator
-        definition: TraceQL operators that express relationships between spans in a trace: child (>>), descendant (>), siblings, and union operations.
+        definition: "TraceQL operators that express relationships between spans in a trace: child (>>), descendant (>), siblings, and union operations."
         tags: [TraceQL]
 
       - term: Intrinsic Attribute
-        definition: Special built-in TraceQL attributes not prefixed with a scope dot: name, duration, status, statusMessage, kind, traceDuration, rootName, rootService.
+        definition: "Special built-in TraceQL attributes not prefixed with a scope dot: name, duration, status, statusMessage, kind, traceDuration, rootName, rootService."
         tags: [TraceQL]
 
   - name: Tempo Platform
