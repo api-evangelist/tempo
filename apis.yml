@@ -116,6 +116,9 @@ apis:
   - type: GitHubRepository
     url: https://github.com/grafana/tempo
 common:
+  - type: License
+    name: AGPL-3.0
+    url: https://github.com/grafana/tempo/blob/main/LICENSE
   - type: AgenticAccess
     url: agentic-access/tempo-agentic-access.yml
   - type: TrustCenter
@@ -147,7 +150,7 @@ common:
   - type: GettingStarted
     url: https://grafana.com/docs/tempo/latest/getting-started/
   - type: OpenAPI
-    url: openapi/tempo-openapi.yml
+    url: openapi/_original/tempo-openapi.yml
   - type: JSONLD
     url: json-ld/tempo-context.jsonld
   - type: JSONSchema
