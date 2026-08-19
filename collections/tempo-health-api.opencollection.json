@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP Health API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Check Readiness",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/ready"
+          },
+          "docs": "Readiness probe endpoint. Returns 200 OK when Tempo is ready to serve requests. Used by Kubernetes readiness probes and load balancers."
+        },
+        {
+          "info": {
+            "name": "Get Prometheus Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/metrics"
+          },
+          "docs": "Exposes Tempo's own operational Prometheus metrics including ingestion rate, query latency, cache hit rates, and storage backend metrics. Scraped by Prometheus or Grafana Agent for Tempo self-monitoring."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP Health Traces API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Traces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Trace By ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/traces/:traceID",
+            "params": [
+              {
+                "name": "traceID",
+                "value": "",
+                "type": "path",
+                "description": "Hexadecimal trace identifier"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time for search window (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time for search window (seconds)"
+              }
+            ]
+          },
+          "docs": "Retrieve a complete trace by its trace ID. Returns all spans belonging to the trace in JSON format. Supports deep object storage search when the trace is not in recent cache."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP Health Tags API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Tag Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search/tags",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Attribute scope filter (span, resource, intrinsic)"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time"
+              }
+            ]
+          },
+          "docs": "Returns all tag keys (span attribute names) present in the trace data within the configured search window. Useful for building search UIs and TraceQL autocomplete."
+        },
+        {
+          "info": {
+            "name": "List Tag Values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search/tag/:tagName/values",
+            "params": [
+              {
+                "name": "tagName",
+                "value": "service.name",
+                "type": "path",
+                "description": "Tag key name to retrieve values for"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "TraceQL query context for filtering tag values"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time"
+              }
+            ]
+          },
+          "docs": "Returns all distinct values for a specific tag key within the trace data. Used for building search filter dropdowns and TraceQL query autocomplete."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

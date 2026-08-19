@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP Health Search API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/search",
+            "params": [
+              {
+                "name": "q",
+                "value": "{.service.name=\"order-service\"}",
+                "type": "query",
+                "description": "TraceQL query string"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "URL-encoded logfmt tag filter (deprecated — use q with TraceQL instead). Example: service.name=frontend"
+              },
+              {
+                "name": "minDuration",
+                "value": "",
+                "type": "query",
+                "description": "Minimum trace duration filter (e.g., 100ms, 1s, 2m)"
+              },
+              {
+                "name": "maxDuration",
+                "value": "",
+                "type": "query",
+                "description": "Maximum trace duration filter (e.g., 100ms, 1s, 2m)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of search results to return"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch start time for search window (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Unix epoch end time for search window (seconds)"
+              }
+            ]
+          },
+          "docs": "Search for traces matching a TraceQL query or tag-based filter. Returns a list of matching trace metadata with root span information, duration, and service names."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,198 @@
+{
+  "item": [
+    {
+      "id": "74e373f3-c915-44e5-9f5a-606fbda86bad",
+      "name": "Traces",
+      "description": {
+        "content": "Retrieve individual traces by trace ID",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "60d5f79a-ddbe-48b2-ba45-75ddb13b78ae",
+          "name": "Get Trace By ID",
+          "request": {
+            "name": "Get Trace By ID",
+            "description": {
+              "content": "Retrieve a complete trace by its trace ID. Returns all spans belonging to the trace in JSON format. Supports deep object storage search when the trace is not in recent cache.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "traces",
+                ":traceID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<long>",
+                  "description": "Unix epoch start time for search window (seconds)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<long>",
+                  "description": "Unix epoch end time for search window (seconds)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "traceID",
+                  "description": "(Required) Hexadecimal trace identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "72a98545-b4b9-4d13-a787-55e6ccda0a43",
+              "name": "Trace found and returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "traces",
+                    ":traceID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "traceID",
+                      "description": "(Required) Hexadecimal trace identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batches\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {}\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {}\n          }\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"scope\": {\n            \"name\": \"string\",\n            \"version\": \"string\"\n          },\n          \"spans\": [\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 1803,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 2622,\n                \"message\": \"string\"\n              }\n            },\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 659,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 5656,\n                \"message\": \"string\"\n              }\n            }\n          ]\n        },\n        {\n          \"scope\": {\n            \"name\": \"string\",\n            \"version\": \"string\"\n          },\n          \"spans\": [\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 9255,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 9128,\n                \"message\": \"string\"\n              }\n            },\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 1397,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 2577,\n                \"message\": \"string\"\n              }\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {}\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {}\n          }\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"scope\": {\n            \"name\": \"string\",\n            \"version\": \"string\"\n          },\n          \"spans\": [\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 7914,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 8760,\n                \"message\": \"string\"\n              }\n            },\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 1913,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 1552,\n                \"message\": \"string\"\n              }\n            }\n          ]\n        },\n        {\n          \"scope\": {\n            \"name\": \"string\",\n            \"version\": \"string\"\n          },\n          \"spans\": [\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 6126,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 4730,\n                \"message\": \"string\"\n              }\n            },\n            {\n              \"traceId\": \"string\",\n              \"spanId\": \"string\",\n              \"parentSpanId\": \"string\",\n              \"name\": \"string\",\n              \"kind\": 5385,\n              \"startTimeUnixNano\": \"string\",\n              \"endTimeUnixNano\": \"string\",\n              \"attributes\": [\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              ],\n              \"status\": {\n                \"code\": 9502,\n                \"message\": \"string\"\n              }\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f69b6c40-9af4-4c9f-8fe8-008ff130a1ae",
+              "name": "Trace not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "traces",
+                    ":traceID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "traceID",
+                      "description": "(Required) Hexadecimal trace identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3200",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "7c64a472-c095-40ae-98b2-9e35de08cddd",
+    "name": "Grafana Tempo HTTP Health Traces API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).\n\nContact Support:\n Name: Grafana Tempo Community\n Email: tempo@grafana.com",
+      "type": "text/plain"
+    }
+  }
+}

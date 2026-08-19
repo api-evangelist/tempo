@@ -1,0 +1,202 @@
+{
+  "item": [
+    {
+      "id": "6bbfad3b-4a9d-4056-9bbc-a1371d8abf7a",
+      "name": "Metrics",
+      "description": {
+        "content": "Generate metrics from trace data",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "653f0887-61cf-4d5f-9b88-e2a48131c798",
+          "name": "Query Metrics Range",
+          "request": {
+            "name": "Query Metrics Range",
+            "description": {
+              "content": "Generate time-series metrics from trace data using TraceQL metrics queries. Supports span rate, error rate, duration histograms, and custom metric generation from trace attributes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "metrics",
+                "query_range"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "(Required) TraceQL metrics query expression"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<long>",
+                  "description": "(Required) Start time as Unix epoch (seconds)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<long>",
+                  "description": "(Required) End time as Unix epoch (seconds)"
+                },
+                {
+                  "disabled": false,
+                  "key": "step",
+                  "value": "1m",
+                  "description": "Query step interval (e.g., 30s, 1m, 5m)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f7a7f90-a6ab-47af-b7f1-b1c620152a51",
+              "name": "Metrics time-series data returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "metrics",
+                    "query_range"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "rate({.service.name=\"order-service\"}[5m])"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "step",
+                      "value": "1m"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"error\",\n  \"data\": {\n    \"resultType\": \"matrix\",\n    \"result\": [\n      {\n        \"metric\": {},\n        \"values\": [\n          [\n            4947,\n            2896\n          ],\n          [\n            4813,\n            5047\n          ]\n        ]\n      },\n      {\n        \"metric\": {},\n        \"values\": [\n          [\n            3511,\n            869\n          ],\n          [\n            6025,\n            5862\n          ]\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a23f4516-e472-4509-ab75-50e7fbe5a597",
+              "name": "Invalid query",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "metrics",
+                    "query_range"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "rate({.service.name=\"order-service\"}[5m])"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "step",
+                      "value": "1m"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3200",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "09590b6e-fdfd-4103-aa96-c0cdf20cd3c6",
+    "name": "Grafana Tempo HTTP Health Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).\n\nContact Support:\n Name: Grafana Tempo Community\n Email: tempo@grafana.com",
+      "type": "text/plain"
+    }
+  }
+}

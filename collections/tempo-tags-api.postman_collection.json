@@ -1,0 +1,264 @@
+{
+  "item": [
+    {
+      "id": "d87a7e81-6696-4179-9e98-898d13fa7836",
+      "name": "Tags",
+      "description": {
+        "content": "Discover tag keys and values in trace data",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "10da8fd3-3317-47d2-9d7c-35a231f18faf",
+          "name": "List Tag Keys",
+          "request": {
+            "name": "List Tag Keys",
+            "description": {
+              "content": "Returns all tag keys (span attribute names) present in the trace data within the configured search window. Useful for building search UIs and TraceQL autocomplete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "search",
+                "tags"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Attribute scope filter (span, resource, intrinsic)"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<long>",
+                  "description": "Unix epoch start time"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<long>",
+                  "description": "Unix epoch end time"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "27dc37b4-fce2-457c-ad28-f37b939baf8e",
+              "name": "Tag keys returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "search",
+                    "tags"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tagNames\": [\n    \"service.name\",\n    \"http.method\",\n    \"db.system\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57b94d45-186e-4df1-9df1-6698e0ceb927",
+          "name": "List Tag Values",
+          "request": {
+            "name": "List Tag Values",
+            "description": {
+              "content": "Returns all distinct values for a specific tag key within the trace data. Used for building search filter dropdowns and TraceQL query autocomplete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "search",
+                "tag",
+                ":tagName",
+                "values"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "TraceQL query context for filtering tag values"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<long>",
+                  "description": "Unix epoch start time"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<long>",
+                  "description": "Unix epoch end time"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "tagName",
+                  "description": "(Required) Tag key name to retrieve values for"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8f3ba901-0746-45d1-ac0e-50d381a36ca5",
+              "name": "Tag values returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "search",
+                    "tag",
+                    ":tagName",
+                    "values"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "tagName",
+                      "description": "(Required) Tag key name to retrieve values for"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tagValues\": [\n    {\n      \"type\": \"string\",\n      \"value\": \"string\"\n    },\n    {\n      \"type\": \"string\",\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3200",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3a4df0bc-f38e-4873-9e65-1f19dc6c8cb7",
+    "name": "Grafana Tempo HTTP Health Tags API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).\n\nContact Support:\n Name: Grafana Tempo Community\n Email: tempo@grafana.com",
+      "type": "text/plain"
+    }
+  }
+}

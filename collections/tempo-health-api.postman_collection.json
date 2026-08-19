@@ -1,0 +1,201 @@
+{
+  "item": [
+    {
+      "id": "935b3ec6-fe89-455a-bf5b-b27048e8b01f",
+      "name": "Health",
+      "description": {
+        "content": "Health and readiness endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9e7978d2-1bd7-4b1b-b7a8-99cdf5cfe287",
+          "name": "Check Readiness",
+          "request": {
+            "name": "Check Readiness",
+            "description": {
+              "content": "Readiness probe endpoint. Returns 200 OK when Tempo is ready to serve requests. Used by Kubernetes readiness probes and load balancers.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ready"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9421c6d3-bbb5-4f8f-bc79-f48c9826715e",
+              "name": "Tempo is ready",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ready"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "ready",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "37ea1a01-2554-4ab1-968d-95281cda50c7",
+              "name": "Tempo is not yet ready",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ready"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a3e73c3-93c1-4fe4-9b2e-ebc701b1230f",
+          "name": "Get Prometheus Metrics",
+          "request": {
+            "name": "Get Prometheus Metrics",
+            "description": {
+              "content": "Exposes Tempo's own operational Prometheus metrics including ingestion rate, query latency, cache hit rates, and storage backend metrics. Scraped by Prometheus or Grafana Agent for Tempo self-monitoring.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bea49c4a-8d59-4409-b9f7-a5fb9f69f899",
+              "name": "Prometheus metrics in text exposition format",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3200",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8713927d-4e37-4e0a-925c-8b730a6a9506",
+    "name": "Grafana Tempo HTTP Health API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).\n\nContact Support:\n Name: Grafana Tempo Community\n Email: tempo@grafana.com",
+      "type": "text/plain"
+    }
+  }
+}

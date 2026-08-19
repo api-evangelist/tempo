@@ -1,0 +1,241 @@
+{
+  "item": [
+    {
+      "id": "6c55f4bf-8787-4047-af0b-2fdff1630e20",
+      "name": "Search",
+      "description": {
+        "content": "Search traces and spans using TraceQL",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5c0a2fad-230e-4411-961e-b5a904747847",
+          "name": "Search Traces",
+          "request": {
+            "name": "Search Traces",
+            "description": {
+              "content": "Search for traces matching a TraceQL query or tag-based filter. Returns a list of matching trace metadata with root span information, duration, and service names.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "q",
+                  "value": "<string>",
+                  "description": "TraceQL query string"
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>",
+                  "description": "URL-encoded logfmt tag filter (deprecated — use q with TraceQL instead). Example: service.name=frontend"
+                },
+                {
+                  "disabled": false,
+                  "key": "minDuration",
+                  "value": "<string>",
+                  "description": "Minimum trace duration filter (e.g., 100ms, 1s, 2m)"
+                },
+                {
+                  "disabled": false,
+                  "key": "maxDuration",
+                  "value": "<string>",
+                  "description": "Maximum trace duration filter (e.g., 100ms, 1s, 2m)"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Maximum number of search results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<long>",
+                  "description": "Unix epoch start time for search window (seconds)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<long>",
+                  "description": "Unix epoch end time for search window (seconds)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f4dcbaec-4c55-4be1-b278-728899973b6c",
+              "name": "Search results returned",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "{.service.name=\"order-service\"}"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "minDuration",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "maxDuration",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"traces\": [\n    {\n      \"traceID\": \"string\",\n      \"rootServiceName\": \"string\",\n      \"rootTraceName\": \"string\",\n      \"startTimeUnixNano\": \"string\",\n      \"durationMs\": 8055\n    },\n    {\n      \"traceID\": \"string\",\n      \"rootServiceName\": \"string\",\n      \"rootTraceName\": \"string\",\n      \"startTimeUnixNano\": \"string\",\n      \"durationMs\": 145\n    }\n  ],\n  \"metrics\": {\n    \"inspectedTraces\": 4335,\n    \"inspectedBytes\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "125f0ab2-f28f-4137-8da3-fa5ac88efd82",
+              "name": "Invalid query",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "q",
+                      "value": "{.service.name=\"order-service\"}"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "minDuration",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "maxDuration",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "start",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "end",
+                      "value": "<long>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:3200",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "febe5733-51c8-43c6-84a1-b1fc6264ded9",
+    "name": "Grafana Tempo HTTP Health Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).\n\nContact Support:\n Name: Grafana Tempo Community\n Email: tempo@grafana.com",
+      "type": "text/plain"
+    }
+  }
+}

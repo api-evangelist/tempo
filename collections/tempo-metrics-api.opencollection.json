@@ -1,0 +1,55 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Grafana Tempo HTTP Health Metrics API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query Metrics Range",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:3200/api/metrics/query_range",
+            "params": [
+              {
+                "name": "q",
+                "value": "rate({.service.name=\"order-service\"}[5m])",
+                "type": "query",
+                "description": "TraceQL metrics query expression"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start time as Unix epoch (seconds)"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End time as Unix epoch (seconds)"
+              },
+              {
+                "name": "step",
+                "value": "",
+                "type": "query",
+                "description": "Query step interval (e.g., 30s, 1m, 5m)"
+              }
+            ]
+          },
+          "docs": "Generate time-series metrics from trace data using TraceQL metrics queries. Supports span rate, error rate, duration histograms, and custom metric generation from trace attributes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
