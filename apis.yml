@@ -20,7 +20,7 @@ description: >-
 url: https://raw.githubusercontent.com/api-evangelist/tempo/refs/heads/main/apis.yml
 created: '2026-03-25'
 modified: '2026-05-19'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 tags:
   - Distributed Tracing
   - Observability
