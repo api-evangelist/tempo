@@ -1,3 +1,16 @@
+deliveryModel:
+  model: self-hosted
+  license: AGPL-3.0
+  open_source: true
+  commercial: false
+  callable_host: false
+  label: Self-hosted open source · you run it yourself
+  confidence: high
+  source:
+  - license
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
@@ -116,6 +129,12 @@ apis:
   - type: GitHubRepository
     url: https://github.com/grafana/tempo
 common:
+  - type: IssueTracker
+    url: https://github.com/grafana/tempo/issues
+  - type: CodeOfConduct
+    url: https://github.com/grafana/tempo/blob/main/CODE_OF_CONDUCT.md
+  - type: ContributionGuide
+    url: https://github.com/grafana/tempo/blob/main/CONTRIBUTING.md
   - type: License
     name: AGPL-3.0
     url: https://github.com/grafana/tempo/blob/main/LICENSE
