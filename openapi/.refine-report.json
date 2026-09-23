@@ -1,11 +1,7 @@
 {
   "provider": "tempo",
   "sources": [
-    "tempo-health-api-openapi.yml",
-    "tempo-metrics-api-openapi.yml",
-    "tempo-search-api-openapi.yml",
-    "tempo-tags-api-openapi.yml",
-    "tempo-traces-api-openapi.yml"
+    "_original/tempo-openapi.yml"
   ],
   "outputs": [
     "tempo-health-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tempo-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "tempo-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tempo-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tempo-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tempo-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tempo-traces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Grafana Tempo HTTP Health Metrics API
+  title: Grafana Tempo HTTP Metrics API
   description: The Grafana Tempo HTTP API provides endpoints for querying distributed traces, searching spans with TraceQL, discovering tag keys and values, and generating metrics from trace data. Tempo is compatible with Jaeger, Zipkin, and OpenTelemetry trace ingestion and query protocols. The API runs on the Tempo HTTP port (default 3200).
   version: 2.x
   contact:
