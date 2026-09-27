@@ -97,6 +97,21 @@ components:
         error:
           type: string
           description: Error message
+    SearchResult:
+      type: object
+      description: Trace search results
+      properties:
+        traces:
+          type: array
+          items:
+            $ref: '#/components/schemas/TraceSearchResult'
+        metrics:
+          type: object
+          properties:
+            inspectedTraces:
+              type: integer
+            inspectedBytes:
+              type: string
     TraceSearchResult:
       type: object
       description: Summary of a trace matching a search query
@@ -121,21 +136,6 @@ components:
           description: Matching span sets (from TraceQL queries)
           items:
             type: object
-    SearchResult:
-      type: object
-      description: Trace search results
-      properties:
-        traces:
-          type: array
-          items:
-            $ref: '#/components/schemas/TraceSearchResult'
-        metrics:
-          type: object
-          properties:
-            inspectedTraces:
-              type: integer
-            inspectedBytes:
-              type: string
 externalDocs:
   description: Grafana Tempo API Documentation
   url: https://grafana.com/docs/tempo/latest/api_docs/
