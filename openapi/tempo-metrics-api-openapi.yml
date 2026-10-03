@@ -70,13 +70,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: API error response
-      properties:
-        error:
-          type: string
-          description: Error message
     MetricsResult:
       type: object
       description: Time-series metrics generated from trace data
@@ -110,6 +103,13 @@ components:
                         oneOf:
                         - type: integer
                         - type: string
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
 externalDocs:
   description: Grafana Tempo API Documentation
   url: https://grafana.com/docs/tempo/latest/api_docs/

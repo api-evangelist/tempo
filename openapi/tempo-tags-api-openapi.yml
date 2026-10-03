@@ -102,6 +102,18 @@ paths:
                 $ref: '#/components/schemas/TagValuesResult'
 components:
   schemas:
+    TagKeysResult:
+      type: object
+      description: List of tag keys present in trace data
+      properties:
+        tagNames:
+          type: array
+          items:
+            type: string
+          example:
+          - service.name
+          - http.method
+          - db.system
     TagValuesResult:
       type: object
       description: Distinct values for a tag key
@@ -115,18 +127,6 @@ components:
                 type: string
               value:
                 type: string
-    TagKeysResult:
-      type: object
-      description: List of tag keys present in trace data
-      properties:
-        tagNames:
-          type: array
-          items:
-            type: string
-          example:
-          - service.name
-          - http.method
-          - db.system
 externalDocs:
   description: Grafana Tempo API Documentation
   url: https://grafana.com/docs/tempo/latest/api_docs/

@@ -63,13 +63,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: API error response
-      properties:
-        error:
-          type: string
-          description: Error message
     KeyValue:
       type: object
       description: An attribute key-value pair
@@ -113,6 +106,13 @@ components:
                       type: array
                       items:
                         $ref: '#/components/schemas/Span'
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
     Span:
       type: object
       description: A single operation within a distributed trace
