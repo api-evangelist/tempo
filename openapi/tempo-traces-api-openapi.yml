@@ -71,48 +71,6 @@ components:
           type: string
         value:
           type: object
-    Trace:
-      type: object
-      description: A complete distributed trace containing all spans
-      properties:
-        batches:
-          type: array
-          description: OTLP resource span batches
-          items:
-            type: object
-            properties:
-              resource:
-                type: object
-                description: Resource attributes (service name, version, etc.)
-                properties:
-                  attributes:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/KeyValue'
-              scopeSpans:
-                type: array
-                description: Spans grouped by instrumentation scope
-                items:
-                  type: object
-                  properties:
-                    scope:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                        version:
-                          type: string
-                    spans:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/Span'
-    Error:
-      type: object
-      description: API error response
-      properties:
-        error:
-          type: string
-          description: Error message
     Span:
       type: object
       description: A single operation within a distributed trace
@@ -152,6 +110,48 @@ components:
               description: Status code (0=unset, 1=ok, 2=error)
             message:
               type: string
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
+    Trace:
+      type: object
+      description: A complete distributed trace containing all spans
+      properties:
+        batches:
+          type: array
+          description: OTLP resource span batches
+          items:
+            type: object
+            properties:
+              resource:
+                type: object
+                description: Resource attributes (service name, version, etc.)
+                properties:
+                  attributes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/KeyValue'
+              scopeSpans:
+                type: array
+                description: Spans grouped by instrumentation scope
+                items:
+                  type: object
+                  properties:
+                    scope:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        version:
+                          type: string
+                    spans:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Span'
 externalDocs:
   description: Grafana Tempo API Documentation
   url: https://grafana.com/docs/tempo/latest/api_docs/

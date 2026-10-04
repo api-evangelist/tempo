@@ -90,13 +90,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: API error response
-      properties:
-        error:
-          type: string
-          description: Error message
     TraceSearchResult:
       type: object
       description: Summary of a trace matching a search query
@@ -136,6 +129,13 @@ components:
               type: integer
             inspectedBytes:
               type: string
+    Error:
+      type: object
+      description: API error response
+      properties:
+        error:
+          type: string
+          description: Error message
 externalDocs:
   description: Grafana Tempo API Documentation
   url: https://grafana.com/docs/tempo/latest/api_docs/
