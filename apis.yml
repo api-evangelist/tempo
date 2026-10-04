@@ -129,6 +129,9 @@ apis:
   - type: GitHubRepository
     url: https://github.com/grafana/tempo
 common:
+  - type: CapabilityMap
+    url: capabilities/tempo-capability-edges.yml
+    name: Tempo Business Capability Map
   - type: IssueTracker
     url: https://github.com/grafana/tempo/issues
   - type: CodeOfConduct
