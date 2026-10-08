@@ -129,6 +129,12 @@ apis:
   - type: GitHubRepository
     url: https://github.com/grafana/tempo
 common:
+  - type: Plans
+    url: plans/tempo-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/tempo-rate-limits.yml
+  - type: FinOps
+    url: finops/tempo-finops.yml
   - type: CapabilityMap
     url: capabilities/tempo-capability-edges.yml
     name: Tempo Business Capability Map
